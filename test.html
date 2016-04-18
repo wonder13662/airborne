@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Airborne Test</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<link href="./css/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<script src="./js/jquery/jquery-1.11.0.min.js"></script>
+<script src="./css/bootstrap/js/bootstrap.min.js"></script>
+<script src="./js/jquery/jquery.form.js"></script>
+<script src="./js/moment/moment.min.js"></script>
+  
+<!-- base component -->
+<script src="./js/airborne/bootstrap.airborne.base.js"></script>
+<script src="./js/airborne/bootstrap.airborne.base.ajax.js"></script>
+<script src="./js/airborne/bootstrap.airborne.base.validator.js"></script>
+<script src="./js/airborne/bootstrap.airborne.base.date.js"></script>
+<script src="./js/airborne/bootstrap.airborne.base.color.js"></script>
+
+<!-- view component -->
+<!--
+<script src="./js/airborne/bootstrap.airborne.view.obj.list.js"></script>
+<script src="./js/airborne/bootstrap.airborne.view.obj.table.js"></script>
+-->
+<script src="./js/airborne/bootstrap.airborne.view.obj.js"></script>
+<script src="./js/airborne/bootstrap.airborne.view.obj.action.js"></script>
+<script src="./js/airborne/bootstrap.airborne.view.obj.action.param.js"></script>
+<script src="./js/airborne/bootstrap.airborne.view.obj.action.list.js"></script>
+<script src="./js/airborne/bootstrap.airborne.view.obj.action.table.js"></script>
+<script src="./js/airborne/bootstrap.airborne.view.column.js"></script>
+<script src="./js/airborne/bootstrap.airborne.view.modal.js"></script>
+<script src="./js/airborne/bootstrap.airborne.view.list_search_tab.js"></script>
+<script src="./js/airborne/bootstrap.airborne.view.table.js"></script>
+<script src="./js/airborne/bootstrap.airborne.view.print.js"></script>
+
+<link href="./css/bootstrap/datepicker/datepicker.css" rel="stylesheet">
+<!-- http://www.eyecon.ro/bootstrap-datepicker/ -->
+<script src="./js/bootstrap/datepicker/bootstrap-datepicker.js"></script>
+
+<script src="sample_action_timeline_obj.js"></script>
+
+
+
+
+
+</head>
+<body role="document">
+    <div id="meeting_agenda_container" class="container" role="main" data-toggle="modal" data-target="#row_modal">
+    </div>
+
+<!-- PC Javascript Library -->
+<script>
+  var _v = airborne.validator;
+  var _v_factory = airborne.validator.factory;
+  var _dates = airborne.dates;
+  var _html = airborne.html;
+  var _obj = airborne.bootstrap.obj;
+  var _server = airborne.server;
+  // REMOVE ME
+  // var _column = airborne.bootstrap.column;
+  var _ajax = airborne.ajax;
+  var _search_tab = airborne.bootstrap.list_search_tab_manager;
+  var _color = airborne.color;
+  var _json = airborne.json;
+  var _print = airborne.bootstrap.view.print;
+  var _console = airborne.console;
+  // var _view_list = airborne.bootstrap.view.obj.list;
+  var _action = airborne.bootstrap.obj.__action;
+  var _action_list = airborne.bootstrap.view.obj.__action_list;
+  var _action_table = airborne.bootstrap.view.obj.__action_table;
+  var _param = param_manager;
+
+
+
+
+
+
+
+  // TEST - ACTION TIMELINE
+  var container_jq = $("div#meeting_agenda_container");
+
+  var sample_action_list_obj = undefined;
+  if(sample_action_list_std != undefined) {
+    sample_action_list_obj = _action.get_action_obj(sample_action_list_std);
+  }
+
+  var test_action_element_collection_set = 
+  _action_list.add_editable_action_list(
+    // action_list
+    sample_action_list_obj
+    // parent_element_set
+    , null
+    // list_container_jq
+    , container_jq
+    // delegate_save_n_reload
+    , _obj.get_delegate(function(cur_outcome_obj){
+
+      if( cur_outcome_obj == undefined ) {
+        console.log("!Error! / delegate_save_n_reload / cur_outcome_obj == undefined");
+        return;
+      }
+      if( _action.is_not_valid_action_item_obj(cur_outcome_obj._action_item_obj) ) {
+        console.log("!Error! / delegate_save_n_reload / _action.is_not_valid_action_item_obj(cur_outcome_obj._action_item_obj)");
+        return;
+      }
+
+      var action_item_obj = cur_outcome_obj._action_item_obj;
+      var action_context_obj = action_item_obj.get_action_context_obj();
+
+      var cur_element_event_manager = action_item_obj.get_event_manager();
+      if(cur_element_event_manager == undefined) {
+        console.log("!Error! / delegate_save_n_reload / cur_element_event_manager == undefined");
+        return;
+      }
+
+      console.log("action_item_obj ::: ",action_item_obj);
+      console.log("action_context_obj ::: ",action_context_obj);
+
+      cur_element_event_manager.release();
+      
+    },this) 
+  );  
+
+
+
+
+
+
+
+
+  // TEST - ACTION OFFICER LIST
+  var sample_action_table_obj = undefined;
+  if(sample_action_table_std != undefined) {
+    sample_action_table_obj = _action.get_action_obj(sample_action_table_std);
+  }
+
+  _action_table.add_editable_table_from_action_table(
+    // parent_jq
+    container_jq
+    // action_table_obj
+    , sample_action_table_obj
+    // delegate_on_event
+    , _obj.get_delegate(function(cur_outcome_obj){
+
+      console.log("cur_outcome_obj ::: ",cur_outcome_obj);
+      var action_item_obj = cur_outcome_obj._action_item_obj;
+
+      var cur_element_event_manager = action_item_obj.get_event_manager();
+      if(cur_element_event_manager == undefined) {
+        console.log("!Error! / delegate_save_n_reload / cur_element_event_manager == undefined");
+        return;
+      }
+
+      var cur_action_obj_for_db_update = action_item_obj.get_action_obj_for_db_update();
+      console.log("cur_action_obj_for_db_update ::: ",cur_action_obj_for_db_update);
+
+      cur_element_event_manager.release();
+
+    },this) // end delegate
+
+  ); // end table
+
+</script>
+</body>
+</html>
