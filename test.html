@@ -124,8 +124,14 @@
 
 
 
-
-
+  var sample_search_option_arr_members = [];
+  if(_v.isValidArray(sample_member_list_std)){
+    for (var idx = 0; idx < sample_member_list_std.length; idx++) {
+      var cur_member_obj = sample_member_list_std[idx];
+      var cur_select_option = _obj.get_select_option(cur_member_obj.__member_name,cur_member_obj.__member_hash_key);
+      sample_search_option_arr_members.push(cur_select_option);
+    }
+  }
 
 
 
@@ -154,6 +160,13 @@
 
       var cur_action_obj_for_db_update = action_item_obj.get_action_obj_for_db_update();
       console.log("cur_action_obj_for_db_update ::: ",cur_action_obj_for_db_update);
+
+      if( _action.EVENT_TYPE_ADD_SELECT_OPTION == cur_outcome_obj._event ) {
+
+        // SELECT BOX를 선택했을 때의 처리.
+        return sample_search_option_arr_members;
+
+      }      
 
       cur_element_event_manager.release();
 

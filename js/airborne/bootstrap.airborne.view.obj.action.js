@@ -5820,6 +5820,9 @@ airborne.bootstrap.obj.__action = {
 				}
 				for (var idx = 0; idx < cur_search_list_arr.length; idx++) {
 					var cur_search_option_obj = cur_search_list_arr[idx];
+
+					console.log("cur_search_option_obj ::: ",cur_search_option_obj);
+
 					if(_obj.is_not_valid_search_option(cur_search_option_obj)) {
 						console.log("!Error! / set_search_list_data_on_input_group / _obj.is_not_valid_search_option(cur_search_option_obj)");
 						return;
